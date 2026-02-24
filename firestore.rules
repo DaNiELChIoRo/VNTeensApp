@@ -1,0 +1,104 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return request.auth.uid == uid;
+    }
+
+    function isManager() {
+      return isAuthenticated() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'manager';
+    }
+
+    function onlyUpdatingField(field) {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly([field]);
+    }
+
+    // ── users ──────────────────────────────────────────────────────────────
+    match /users/{uid} {
+      // Owner can read their own doc; manager can read all
+      allow read: if isOwner(uid) || isManager();
+
+      // Owner can create their own doc (registration)
+      allow create: if isOwner(uid);
+
+      // Owner can update their own doc, but CANNOT change role
+      // Manager can update any doc (including role)
+      allow update: if (isOwner(uid) && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role']))
+                    || isManager();
+
+      allow delete: if isManager();
+
+      // FCM tokens subcollection
+      match /fcmTokens/{token} {
+        allow read, write: if isOwner(uid);
+      }
+    }
+
+    // ── events ─────────────────────────────────────────────────────────────
+    match /events/{eventId} {
+      // Manager sees all; users only see events they're assigned to
+      allow read: if isManager() ||
+                    (isAuthenticated() && request.auth.uid in resource.data.assignedUserIds);
+
+      allow create, update, delete: if isManager();
+    }
+
+    // ── announcements ──────────────────────────────────────────────────────
+    match /announcements/{announcementId} {
+      // All authenticated users can read
+      allow read: if isAuthenticated();
+
+      // Only manager can create, fully update, delete
+      allow create, delete: if isManager();
+
+      // Any authenticated user can update readBy field only
+      allow update: if isManager() ||
+                      (isAuthenticated() && onlyUpdatingField('readBy'));
+    }
+
+    // ── messages ───────────────────────────────────────────────────────────
+    match /messages/{messageId} {
+      // Recipient or manager can read
+      allow read: if isManager() ||
+                    (isAuthenticated() &&
+                      (resource.data.recipientId == request.auth.uid ||
+                       resource.data.recipientId == 'broadcast'));
+
+      // Only manager can create messages
+      allow create: if isManager();
+
+      // Anyone who can read can update only readBy
+      allow update: if isManager() ||
+                      (isAuthenticated() &&
+                        (resource.data.recipientId == request.auth.uid ||
+                         resource.data.recipientId == 'broadcast') &&
+                        onlyUpdatingField('readBy'));
+
+      allow delete: if isManager();
+    }
+
+    // ── notifications ──────────────────────────────────────────────────────
+    match /notifications/{notificationId} {
+      // User can only read their own notifications
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+
+      // Only backend / Cloud Functions should create notifications
+      // For client-side demo, allow manager to create
+      allow create: if isManager();
+
+      // User can mark their own notification as read
+      allow update: if isAuthenticated() &&
+                      resource.data.userId == request.auth.uid &&
+                      onlyUpdatingField('read');
+
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
+  }
+}

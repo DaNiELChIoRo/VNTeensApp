@@ -3,6 +3,8 @@ import {
   doc,
   addDoc,
   updateDoc,
+  getDocs,
+  writeBatch,
   query,
   where,
   orderBy,
@@ -30,7 +32,6 @@ export const markAllNotificationsRead = async (uid: string) => {
     where('userId', '==', uid),
     where('read', '==', false)
   )
-  const { getDocs, writeBatch } = await import('firebase/firestore')
   const snap = await getDocs(q)
   const batch = writeBatch(db)
   snap.docs.forEach((d) => batch.update(d.ref, { read: true }))

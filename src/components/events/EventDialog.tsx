@@ -1,6 +1,7 @@
 import React from 'react'
 import { Dialog, DialogTitle, DialogContent, IconButton } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
+import { Timestamp } from 'firebase/firestore'
 import EventForm, { EventFormData } from './EventForm'
 import { AppEvent } from '../../types'
 import { createEvent, updateEvent } from '../../services/eventService'
@@ -27,8 +28,8 @@ const EventDialog: React.FC<Props> = ({ open, onClose, event, defaultStart }) =>
           title: data.title,
           description: data.description,
           location: data.location,
-          startDateTime: start as unknown as import('firebase/firestore').Timestamp,
-          endDateTime: end as unknown as import('firebase/firestore').Timestamp,
+          startDateTime: Timestamp.fromDate(start),
+          endDateTime: Timestamp.fromDate(end),
           allDay: data.allDay,
           eventType: data.eventType,
           assignedUserIds: data.assignedUserIds,
@@ -57,8 +58,8 @@ const EventDialog: React.FC<Props> = ({ open, onClose, event, defaultStart }) =>
   const getDefaultStart = () => {
     const d = defaultStart ?? new Date()
     return {
-      startDateTime: { toDate: () => d } as import('firebase/firestore').Timestamp,
-      endDateTime: { toDate: () => new Date(d.getTime() + 3600000) } as import('firebase/firestore').Timestamp,
+      startDateTime: Timestamp.fromDate(d),
+      endDateTime: Timestamp.fromDate(new Date(d.getTime() + 3600000)),
     }
   }
 

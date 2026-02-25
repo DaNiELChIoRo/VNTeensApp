@@ -25,6 +25,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const unsub = onAuthStateChanged(auth, async (user) => {
       setCurrentUser(user)
       if (user) {
+        // Ensure a Firestore doc exists for every auth method (email, Google, etc.)
+        await createUserDoc(user.uid, {
+          displayName: user.displayName ?? user.email ?? 'Unknown',
+          email: user.email ?? '',
+          photoURL: user.photoURL,
+        })
         const profile = await getUserDoc(user.uid)
         setUserRole(profile?.role ?? 'user')
       } else {

@@ -39,7 +39,8 @@ export const createEvent = (input: CreateEventInput) =>
   })
 
 export const updateEvent = (id: string, data: Partial<Omit<AppEvent, 'id'>>) => {
-  const payload: Record<string, unknown> = { ...data }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const payload: Record<string, any> = { ...data }
   if (data.startDateTime instanceof Date) {
     payload.startDateTime = Timestamp.fromDate(data.startDateTime as unknown as Date)
   }

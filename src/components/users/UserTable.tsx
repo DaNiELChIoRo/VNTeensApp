@@ -7,7 +7,6 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Chip,
   Select,
   MenuItem,
   Typography,

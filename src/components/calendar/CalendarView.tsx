@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
@@ -113,8 +113,8 @@ const CalendarView: React.FC<Props> = ({ events, isManager }) => {
         event={selectedEvent}
         anchorEl={popoverAnchor}
         onClose={() => { setPopoverAnchor(null); setSelectedEvent(null) }}
-        onEdit={(ev) => { setEditDialogOpen(true); setPopoverAnchor(null) }}
-        onDelete={(ev) => { setDeleteDialogOpen(true); setPopoverAnchor(null) }}
+        onEdit={() => { setEditDialogOpen(true); setPopoverAnchor(null) }}
+        onDelete={() => { setDeleteDialogOpen(true); setPopoverAnchor(null) }}
       />
 
       <EventDialog

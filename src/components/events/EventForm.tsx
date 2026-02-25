@@ -111,9 +111,10 @@ const EventForm: React.FC<Props> = ({ initial, onSubmit, onCancel, submitLabel =
         value={users.filter((u) => assignedUserIds.includes(u.uid))}
         onChange={(_, selected) => setAssignedUserIds(selected.map((u) => u.uid))}
         renderTags={(value, getTagProps) =>
-          value.map((u, index) => (
-            <Chip key={u.uid} label={u.displayName || u.email} size="small" {...getTagProps({ index })} />
-          ))
+          value.map((u, index) => {
+            const { key, ...tagProps } = getTagProps({ index })
+            return <Chip key={key} label={u.displayName || u.email} size="small" {...tagProps} />
+          })
         }
         renderInput={(params) => <TextField {...params} label="Assign People" />}
       />

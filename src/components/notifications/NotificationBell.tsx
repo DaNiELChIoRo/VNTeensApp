@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { IconButton, Badge } from '@mui/material'
 import NotificationsIcon from '@mui/icons-material/Notifications'
 import { useNavigate } from 'react-router-dom'

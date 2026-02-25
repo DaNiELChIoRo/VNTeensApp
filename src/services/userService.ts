@@ -43,7 +43,8 @@ export const updateUserRole = (uid: string, role: UserRole) =>
   updateDoc(doc(db, COLLECTION, uid), { role })
 
 export const updateUserProfile = (uid: string, data: Partial<Pick<AppUser, 'displayName' | 'photoURL'>>) =>
-  updateDoc(doc(db, COLLECTION, uid), data as Record<string, unknown>)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  updateDoc(doc(db, COLLECTION, uid), data as Record<string, any>)
 
 export const registerFCMToken = async (uid: string, token: string) => {
   const tokenRef = doc(db, COLLECTION, uid, 'fcmTokens', token)

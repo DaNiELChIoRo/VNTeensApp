@@ -41,9 +41,7 @@ const MessagesPage: React.FC = () => {
       ) : (
         <Grid container spacing={2} sx={{ height: { md: 'calc(100vh - 160px)' } }}>
           <Grid
-            item
-            xs={12}
-            md={4}
+            size={{ xs: 12, md: 4 }}
             sx={{ display: isMobile && selected ? 'none' : 'block', overflow: 'auto' }}
           >
             <Paper elevation={0} variant="outlined" sx={{ height: '100%', overflow: 'auto' }}>
@@ -55,9 +53,7 @@ const MessagesPage: React.FC = () => {
             </Paper>
           </Grid>
           <Grid
-            item
-            xs={12}
-            md={8}
+            size={{ xs: 12, md: 8 }}
             sx={{ display: isMobile && !selected ? 'none' : 'block' }}
           >
             {selected ? (

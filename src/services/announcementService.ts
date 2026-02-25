@@ -29,7 +29,8 @@ export const createAnnouncement = (data: {
   })
 
 export const updateAnnouncement = (id: string, data: Partial<Announcement>) =>
-  updateDoc(doc(db, COLLECTION, id), data as Record<string, unknown>)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  updateDoc(doc(db, COLLECTION, id), data as Record<string, any>)
 
 export const deleteAnnouncement = (id: string) => deleteDoc(doc(db, COLLECTION, id))
 

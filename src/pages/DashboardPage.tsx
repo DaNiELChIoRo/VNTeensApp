@@ -8,7 +8,6 @@ import {
   List,
   ListItem,
   ListItemText,
-  Chip,
   Divider,
 } from '@mui/material'
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
@@ -73,16 +72,16 @@ const DashboardPage: React.FC = () => {
       </Typography>
 
       <Grid container spacing={2} sx={{ mb: 3 }}>
-        <Grid item xs={6} sm={3}>
+        <Grid size={{ xs: 6, sm: 3 }}>
           <StatCard icon={<CalendarTodayIcon />} label="Upcoming Events" value={upcomingEvents.length} color="#3f51b5" />
         </Grid>
-        <Grid item xs={6} sm={3}>
+        <Grid size={{ xs: 6, sm: 3 }}>
           <StatCard icon={<CampaignIcon />} label="Unread Posts" value={unreadAnnouncements} color="#7c4dff" />
         </Grid>
-        <Grid item xs={6} sm={3}>
+        <Grid size={{ xs: 6, sm: 3 }}>
           <StatCard icon={<MailIcon />} label="Unread Messages" value={unreadMessages} color="#00bcd4" />
         </Grid>
-        <Grid item xs={6} sm={3}>
+        <Grid size={{ xs: 6, sm: 3 }}>
           <StatCard icon={<NotificationsIcon />} label="Notifications" value={unreadCount} color="#ff9800" />
         </Grid>
       </Grid>

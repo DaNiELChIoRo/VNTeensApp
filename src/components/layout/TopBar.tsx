@@ -6,11 +6,15 @@ import {
   Typography,
   Avatar,
   Box,
+  Tooltip,
   useTheme,
   useMediaQuery,
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
+import DarkModeIcon from '@mui/icons-material/DarkMode'
+import LightModeIcon from '@mui/icons-material/LightMode'
 import { useAuth } from '../../hooks/useAuth'
+import { useThemeMode } from '../../contexts/ThemeContext'
 import NotificationBell from '../notifications/NotificationBell'
 
 interface Props {
@@ -20,6 +24,7 @@ interface Props {
 
 const TopBar: React.FC<Props> = ({ onMenuClick, drawerWidth }) => {
   const { currentUser } = useAuth()
+  const { mode, toggleTheme } = useThemeMode()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
@@ -46,6 +51,11 @@ const TopBar: React.FC<Props> = ({ onMenuClick, drawerWidth }) => {
           VNTeens
         </Typography>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Tooltip title={mode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}>
+            <IconButton onClick={toggleTheme}>
+              {mode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
+            </IconButton>
+          </Tooltip>
           <NotificationBell />
           <Avatar
             src={currentUser?.photoURL ?? undefined}

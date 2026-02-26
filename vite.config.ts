@@ -17,8 +17,8 @@ export default defineConfig({
         background_color: '#ffffff',
         display: 'standalone',
         orientation: 'portrait',
-        start_url: '/',
-        scope: '/',
+        start_url: '/VNTeensApp/',
+        scope: '/VNTeensApp/',
         icons: [
           {
             src: 'icons/icon-192.png',
@@ -39,7 +39,8 @@ export default defineConfig({
         ],
       },
       workbox: {
-        navigateFallback: '/index.html',
+        navigateFallback: '/VNTeensApp/index.html',
+        navigateFallbackAllowlist: [/^\/VNTeensApp\//],
         navigateFallbackDenylist: [/^\/firebase-messaging-sw\.js$/],
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
         runtimeCaching: [

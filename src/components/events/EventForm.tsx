@@ -46,6 +46,25 @@ const EventForm: React.FC<Props> = ({ initial, onSubmit, onCancel, submitLabel =
       ? toInputDate(initial.endDateTime.toDate())
       : toInputDate(new Date(Date.now() + 3600000))
   )
+
+  const handleStartChange = (value: string) => {
+    setStartDateTime(value)
+    // Auto-advance end date if it would be before the new start
+    const newStart = new Date(value)
+    const currentEnd = new Date(endDateTime)
+    if (currentEnd <= newStart) {
+      // Keep the same duration (1 hour default), just shift end to start + 1 hour
+      setEndDateTime(toInputDate(new Date(newStart.getTime() + 3600000)))
+    }
+  }
+
+  const handleStartDateOnlyChange = (value: string) => {
+    setStartDateTime(value)
+    // For all-day events: if end date is before new start date, set end = start
+    if (endDateTime.slice(0, 10) < value) {
+      setEndDateTime(value)
+    }
+  }
   const [allDay, setAllDay] = useState(initial?.allDay ?? false)
   const [eventType, setEventType] = useState<EventType>(initial?.eventType ?? 'other')
   const [assignedUserIds, setAssignedUserIds] = useState<string[]>(initial?.assignedUserIds ?? [])
@@ -90,7 +109,7 @@ const EventForm: React.FC<Props> = ({ initial, onSubmit, onCancel, submitLabel =
         label="Start"
         type={allDay ? 'date' : 'datetime-local'}
         value={allDay ? startDateTime.slice(0, 10) : startDateTime}
-        onChange={(e) => setStartDateTime(e.target.value)}
+        onChange={(e) => allDay ? handleStartDateOnlyChange(e.target.value) : handleStartChange(e.target.value)}
         required
         fullWidth
         InputLabelProps={{ shrink: true }}
@@ -100,6 +119,7 @@ const EventForm: React.FC<Props> = ({ initial, onSubmit, onCancel, submitLabel =
         type={allDay ? 'date' : 'datetime-local'}
         value={allDay ? endDateTime.slice(0, 10) : endDateTime}
         onChange={(e) => setEndDateTime(e.target.value)}
+        inputProps={{ min: allDay ? startDateTime.slice(0, 10) : startDateTime }}
         required
         fullWidth
         InputLabelProps={{ shrink: true }}

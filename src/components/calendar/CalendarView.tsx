@@ -18,9 +18,10 @@ import { useToast } from '../../contexts/NotificationContext'
 interface Props {
   events: AppEvent[]
   isManager: boolean
+  hideToolbar?: boolean
 }
 
-const CalendarView: React.FC<Props> = ({ events, isManager }) => {
+const CalendarView: React.FC<Props> = ({ events, isManager, hideToolbar }) => {
   const theme = useTheme()
   const { showToast } = useToast()
 
@@ -95,7 +96,7 @@ const CalendarView: React.FC<Props> = ({ events, isManager }) => {
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin]}
         initialView="dayGridMonth"
-        headerToolbar={{
+        headerToolbar={hideToolbar ? false : {
           left: 'prev,next today',
           center: 'title',
           right: 'dayGridMonth,timeGridWeek,listWeek',

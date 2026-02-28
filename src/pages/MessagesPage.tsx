@@ -24,13 +24,27 @@ const MessagesPage: React.FC = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const [selected, setSelected] = useState<Message | null>(null)
   const [composeOpen, setComposeOpen] = useState(false)
+  const [replyDefaults, setReplyDefaults] = useState<{ recipientId: string; subject: string } | null>(null)
+
+  const handleReply = (message: Message) => {
+    setReplyDefaults({
+      recipientId: message.senderId,
+      subject: message.subject.startsWith('Re: ') ? message.subject : `Re: ${message.subject}`,
+    })
+    setComposeOpen(true)
+  }
+
+  const handleCloseCompose = () => {
+    setComposeOpen(false)
+    setReplyDefaults(null)
+  }
 
   return (
     <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
         <Typography variant="h5" fontWeight={700}>Messages</Typography>
         <RoleGuard requiredRole="manager">
-          <Button variant="contained" startIcon={<AddIcon />} onClick={() => setComposeOpen(true)}>
+          <Button variant="contained" startIcon={<AddIcon />} onClick={() => { setReplyDefaults(null); setComposeOpen(true) }}>
             Compose
           </Button>
         </RoleGuard>
@@ -60,6 +74,7 @@ const MessagesPage: React.FC = () => {
               <MessageDetail
                 message={selected}
                 onBack={isMobile ? () => setSelected(null) : undefined}
+                onReply={handleReply}
               />
             ) : (
               <EmptyState message="Select a message to read" icon={MailIcon} />
@@ -68,7 +83,12 @@ const MessagesPage: React.FC = () => {
         </Grid>
       )}
 
-      <ComposeDialog open={composeOpen} onClose={() => setComposeOpen(false)} />
+      <ComposeDialog
+        open={composeOpen}
+        onClose={handleCloseCompose}
+        defaultRecipient={replyDefaults?.recipientId}
+        defaultSubject={replyDefaults?.subject}
+      />
     </Box>
   )
 }

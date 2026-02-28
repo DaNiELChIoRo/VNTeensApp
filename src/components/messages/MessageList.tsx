@@ -48,12 +48,14 @@ const MessageList: React.FC<Props> = ({ messages, selectedId, onSelect }) => {
                 )}
               </ListItemIcon>
               <ListItemText
+                primaryTypographyProps={{ component: 'div' }}
+                secondaryTypographyProps={{ component: 'div' }}
                 primary={
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <Typography variant="body2" fontWeight={isRead ? 400 : 700} noWrap sx={{ maxWidth: 180 }}>
+                    <Typography variant="body2" fontWeight={isRead ? 400 : 700} noWrap sx={{ flex: 1, minWidth: 0 }}>
                       {msg.subject}
                     </Typography>
-                    <Box sx={{ display: 'flex', gap: 0.5, alignItems: 'center' }}>
+                    <Box sx={{ display: 'flex', gap: 0.5, alignItems: 'center', flexShrink: 0, ml: 0.5 }}>
                       {isBroadcast && <Chip label="Broadcast" size="small" sx={{ fontSize: '0.6rem' }} />}
                       {!isRead && <Chip label="New" size="small" color="primary" sx={{ fontSize: '0.6rem' }} />}
                     </Box>
@@ -61,7 +63,7 @@ const MessageList: React.FC<Props> = ({ messages, selectedId, onSelect }) => {
                 }
                 secondary={
                   <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <Typography variant="caption" color="text.secondary" noWrap>
+                    <Typography variant="caption" color="text.secondary" noWrap sx={{ flex: 1, minWidth: 0 }}>
                       {msg.senderName}
                     </Typography>
                     <Typography variant="caption" color="text.secondary" sx={{ ml: 1, flexShrink: 0 }}>

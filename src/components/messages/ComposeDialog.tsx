@@ -21,19 +21,25 @@ interface Props {
   open: boolean
   onClose: () => void
   defaultRecipient?: string
+  defaultSubject?: string
 }
 
-const ComposeDialog: React.FC<Props> = ({ open, onClose, defaultRecipient = 'broadcast' }) => {
+const ComposeDialog: React.FC<Props> = ({ open, onClose, defaultRecipient = 'broadcast', defaultSubject = '' }) => {
   const { currentUser } = useAuth()
   const { showToast } = useToast()
   const [recipient, setRecipient] = useState(defaultRecipient)
-  const [subject, setSubject] = useState('')
+  const [subject, setSubject] = useState(defaultSubject)
   const [body, setBody] = useState('')
   const [users, setUsers] = useState<AppUser[]>([])
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    if (open) getAllUsers().then(setUsers)
+    if (open) {
+      getAllUsers().then(setUsers)
+      setRecipient(defaultRecipient)
+      setSubject(defaultSubject)
+      setBody('')
+    }
   }, [open])
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -63,7 +69,7 @@ const ComposeDialog: React.FC<Props> = ({ open, onClose, defaultRecipient = 'bro
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        Compose Message
+        {defaultSubject ? 'Reply' : 'Compose Message'}
         <IconButton size="small" onClick={onClose}><CloseIcon /></IconButton>
       </DialogTitle>
       <DialogContent>

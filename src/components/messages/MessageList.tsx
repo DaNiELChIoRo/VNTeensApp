@@ -60,9 +60,14 @@ const MessageList: React.FC<Props> = ({ messages, selectedId, onSelect }) => {
                   </Box>
                 }
                 secondary={
-                  <Typography variant="caption" color="text.secondary">
-                    {formatRelative(msg.sentAt)}
-                  </Typography>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Typography variant="caption" color="text.secondary" noWrap>
+                      {msg.senderName}
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary" sx={{ ml: 1, flexShrink: 0 }}>
+                      {formatRelative(msg.sentAt)}
+                    </Typography>
+                  </Box>
                 }
               />
             </ListItemButton>

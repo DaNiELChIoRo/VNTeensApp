@@ -57,7 +57,10 @@ const MessagesPage: React.FC = () => {
             sx={{ display: isMobile && !selected ? 'none' : 'block' }}
           >
             {selected ? (
-              <MessageDetail message={selected} />
+              <MessageDetail
+                message={selected}
+                onBack={isMobile ? () => setSelected(null) : undefined}
+              />
             ) : (
               <EmptyState message="Select a message to read" icon={MailIcon} />
             )}

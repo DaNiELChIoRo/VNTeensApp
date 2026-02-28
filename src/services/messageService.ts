@@ -18,6 +18,7 @@ const COLLECTION = 'messages'
 
 export const sendMessage = (data: {
   senderId: string
+  senderName: string
   recipientId: string
   subject: string
   body: string

@@ -41,7 +41,13 @@ const ComposeDialog: React.FC<Props> = ({ open, onClose, defaultRecipient = 'bro
     if (!currentUser) return
     setLoading(true)
     try {
-      await sendMessage({ senderId: currentUser.uid, recipientId: recipient, subject, body })
+      await sendMessage({
+        senderId: currentUser.uid,
+        senderName: currentUser.displayName || currentUser.email || 'Unknown',
+        recipientId: recipient,
+        subject,
+        body,
+      })
       showToast('Message sent', 'success')
       setSubject('')
       setBody('')

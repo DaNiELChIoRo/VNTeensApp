@@ -48,6 +48,7 @@ export interface Announcement {
 export interface Message {
   id: string
   senderId: string
+  senderName: string
   recipientId: string // 'broadcast' or uid
   subject: string
   body: string

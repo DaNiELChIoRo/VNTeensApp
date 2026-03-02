@@ -4,13 +4,17 @@ export async function captureElementAsSnapshot(el: HTMLElement): Promise<Blob> {
   // Allow fonts/layout to settle before capture
   await new Promise((resolve) => setTimeout(resolve, 120))
 
-  const canvas = await html2canvas(el, {
+  // `scale` is a valid html2canvas option but is absent from @types/html2canvas,
+  // so we pass options via an `any`-typed variable to avoid the false TS error.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const opts: any = {
     useCORS: true,
     scale: 2,
     backgroundColor: '#ffffff',
     width: el.scrollWidth,
     height: el.scrollHeight,
-  })
+  }
+  const canvas = await html2canvas(el, opts)
 
   return new Promise((resolve, reject) => {
     canvas.toBlob((blob) => {

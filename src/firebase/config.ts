@@ -1,4 +1,5 @@
 import { initializeApp, getApps, getApp } from 'firebase/app'
+import { getPerformance } from 'firebase/performance'
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -11,3 +12,5 @@ const firebaseConfig = {
 }
 
 export const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp()
+
+export const perf = getPerformance(app)

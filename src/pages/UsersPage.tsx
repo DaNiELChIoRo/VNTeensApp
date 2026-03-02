@@ -9,10 +9,12 @@ import {
   Divider,
 } from '@mui/material'
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive'
-import { useQuery } from '@tanstack/react-query'
+import PersonAddIcon from '@mui/icons-material/PersonAdd'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { getAllUsers } from '../services/userService'
 import { sendTestPushNotification } from '../services/pushNotificationService'
 import UserTable from '../components/users/UserTable'
+import CreateUserDialog from '../components/users/CreateUserDialog'
 import LoadingSpinner from '../components/common/LoadingSpinner'
 import { useAuth } from '../hooks/useAuth'
 import { useToast } from '../contexts/NotificationContext'
@@ -26,8 +28,10 @@ const UsersPage: React.FC = () => {
     staleTime: 30000,
   })
 
+  const queryClient = useQueryClient()
   const { currentUser } = useAuth()
   const { showToast } = useToast()
+  const [createDialogOpen, setCreateDialogOpen] = useState(false)
   const [pushTitle, setPushTitle] = useState('')
   const [pushBody, setPushBody] = useState('')
   const [isSending, setIsSending] = useState(false)
@@ -58,10 +62,24 @@ const UsersPage: React.FC = () => {
 
   return (
     <Box>
-      <Typography variant="h5" fontWeight={700} gutterBottom>
-        User Management
-      </Typography>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
+        <Typography variant="h5" fontWeight={700}>
+          User Management
+        </Typography>
+        <Button
+          variant="contained"
+          startIcon={<PersonAddIcon />}
+          onClick={() => setCreateDialogOpen(true)}
+        >
+          Add User
+        </Button>
+      </Box>
       {isLoading ? <LoadingSpinner /> : <UserTable users={users} />}
+      <CreateUserDialog
+        open={createDialogOpen}
+        onClose={() => setCreateDialogOpen(false)}
+        onSuccess={() => queryClient.invalidateQueries({ queryKey: ['users'] })}
+      />
 
       {canSendPush && (
         <>

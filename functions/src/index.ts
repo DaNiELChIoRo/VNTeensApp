@@ -1,5 +1,6 @@
 import * as admin from 'firebase-admin'
 import { onCall, HttpsError } from 'firebase-functions/v2/https'
+import { defineSecret } from 'firebase-functions/params'
 
 admin.initializeApp()
 
@@ -85,5 +86,52 @@ export const sendTestPushNotification = onCall(
       failureCount: result.failureCount,
       tokenCount: tokens.length,
     }
+  }
+)
+
+const webApiKey = defineSecret('FIREBASE_WEB_API_KEY')
+
+interface CreateUserData {
+  email: string
+  displayName: string
+  role: 'manager' | 'user'
+}
+
+export const createUserAccount = onCall(
+  { region: 'us-central1', secrets: [webApiKey] },
+  async (request) => {
+    if (!request.auth) throw new HttpsError('unauthenticated', 'Must be signed in.')
+
+    const callerDoc = await admin.firestore().collection('users').doc(request.auth.uid).get()
+    if (callerDoc.data()?.role !== 'manager') {
+      throw new HttpsError('permission-denied', 'Manager role required.')
+    }
+
+    const { email, displayName, role = 'user' } = request.data as CreateUserData
+    if (!email?.trim() || !displayName?.trim()) {
+      throw new HttpsError('invalid-argument', 'email and displayName are required.')
+    }
+
+    const userRecord = await admin.auth().createUser({ email, displayName })
+
+    await admin.firestore().collection('users').doc(userRecord.uid).set({
+      uid: userRecord.uid,
+      displayName,
+      email,
+      photoURL: null,
+      role,
+      createdAt: admin.firestore.FieldValue.serverTimestamp(),
+    })
+
+    await fetch(
+      `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${webApiKey.value()}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ requestType: 'PASSWORD_RESET', email }),
+      }
+    )
+
+    return { uid: userRecord.uid }
   }
 )

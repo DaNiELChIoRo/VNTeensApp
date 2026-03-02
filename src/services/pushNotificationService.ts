@@ -18,3 +18,14 @@ export const sendTestPushNotification = (payload: SendPushPayload): Promise<Send
   const fn = httpsCallable<SendPushPayload, SendPushResult>(functions, 'sendTestPushNotification')
   return fn(payload).then((r) => r.data)
 }
+
+interface CreateUserPayload {
+  email: string
+  displayName: string
+  role: 'manager' | 'user'
+}
+
+export const createUserAccount = (data: CreateUserPayload): Promise<{ uid: string }> => {
+  const fn = httpsCallable<CreateUserPayload, { uid: string }>(functions, 'createUserAccount')
+  return fn(data).then((r) => r.data)
+}

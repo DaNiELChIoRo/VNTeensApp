@@ -69,7 +69,7 @@ const CalendarPage: React.FC = () => {
       <Box
         ref={snapshotContainerRef}
         sx={{
-          position: 'fixed',
+          position: 'absolute',
           top: '-9999px',
           left: '-9999px',
           width: '1024px',

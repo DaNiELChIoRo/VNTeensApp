@@ -2,7 +2,7 @@ import html2canvas from 'html2canvas'
 
 export async function captureElementAsSnapshot(el: HTMLElement): Promise<Blob> {
   // Allow fonts/layout to settle before capture
-  await new Promise((resolve) => setTimeout(resolve, 120))
+  await new Promise((resolve) => setTimeout(resolve, 300))
 
   // `scale` is a valid html2canvas option but is absent from @types/html2canvas,
   // so we pass options via an `any`-typed variable to avoid the false TS error.

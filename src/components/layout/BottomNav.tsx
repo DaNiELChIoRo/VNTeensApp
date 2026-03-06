@@ -20,18 +20,22 @@ const BottomNav: React.FC = () => {
   return (
     <Paper
       elevation={3}
-      sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, display: { md: 'none' }, zIndex: 1100 }}
+      sx={{
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        display: { md: 'none' },
+        zIndex: 1100,
+        paddingBottom: 'env(safe-area-inset-bottom)',
+      }}
     >
-      <BottomNavigation
-        value={value}
-        onChange={(_, newVal) => navigate(ROUTES[newVal])}
-        showLabels
-      >
-        <BottomNavigationAction label={t('nav.home')} icon={<DashboardIcon />} />
-        <BottomNavigationAction label={t('nav.calendar')} icon={<CalendarMonthIcon />} />
-        <BottomNavigationAction label={t('nav.posts')} icon={<CampaignIcon />} />
-        <BottomNavigationAction label={t('nav.messages')} icon={<MailIcon />} />
-        <BottomNavigationAction label={t('nav.alerts')} icon={<NotificationsIcon />} />
+      <BottomNavigation value={value} showLabels>
+        <BottomNavigationAction label={t('nav.home')}          icon={<DashboardIcon />}     onClick={() => navigate('/dashboard')} />
+        <BottomNavigationAction label={t('nav.calendar')}      icon={<CalendarMonthIcon />} onClick={() => navigate('/calendar')} />
+        <BottomNavigationAction label={t('nav.posts')}         icon={<CampaignIcon />}      onClick={() => navigate('/announcements')} />
+        <BottomNavigationAction label={t('nav.messages')}      icon={<MailIcon />}          onClick={() => navigate('/messages')} />
+        <BottomNavigationAction label={t('nav.alerts')}        icon={<NotificationsIcon />} onClick={() => navigate('/notifications')} />
       </BottomNavigation>
     </Paper>
   )

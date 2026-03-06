@@ -9,12 +9,14 @@ import {
   Box,
   Link,
 } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '../../hooks/useAuth'
 import GoogleSignInButton from './GoogleSignInButton'
 import { resetPassword } from '../../firebase/auth'
 
 const LoginForm: React.FC = () => {
   const { loginWithEmail, loginWithGoogle } = useAuth()
+  const { t } = useTranslation()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
@@ -29,7 +31,7 @@ const LoginForm: React.FC = () => {
     try {
       await loginWithEmail(email, password)
     } catch (err: unknown) {
-      const msg = (err as { message?: string })?.message ?? 'Login failed'
+      const msg = (err as { message?: string })?.message ?? t('auth.loginFailed')
       setError(msg.replace('Firebase: ', '').replace(/\(auth\/.*\)/, '').trim())
     } finally {
       setLoading(false)
@@ -42,7 +44,7 @@ const LoginForm: React.FC = () => {
     try {
       await loginWithGoogle()
     } catch (err: unknown) {
-      const msg = (err as { message?: string })?.message ?? 'Google sign-in failed'
+      const msg = (err as { message?: string })?.message ?? t('auth.googleFailed')
       setError(msg.replace('Firebase: ', '').trim())
     } finally {
       setGoogleLoading(false)
@@ -50,22 +52,22 @@ const LoginForm: React.FC = () => {
   }
 
   const handleReset = async () => {
-    if (!email) { setError('Enter your email first'); return }
+    if (!email) { setError(t('auth.enterEmail')); return }
     try {
       await resetPassword(email)
       setResetSent(true)
     } catch {
-      setError('Could not send reset email')
+      setError(t('auth.resetFailed'))
     }
   }
 
   return (
     <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
       {error && <Alert severity="error">{error}</Alert>}
-      {resetSent && <Alert severity="success">Password reset email sent!</Alert>}
+      {resetSent && <Alert severity="success">{t('auth.resetSent')}</Alert>}
 
       <TextField
-        label="Email"
+        label={t('auth.email')}
         type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
@@ -74,7 +76,7 @@ const LoginForm: React.FC = () => {
         autoComplete="email"
       />
       <TextField
-        label="Password"
+        label={t('auth.password')}
         type="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
@@ -84,7 +86,7 @@ const LoginForm: React.FC = () => {
       />
       <Box sx={{ textAlign: 'right', mt: -1 }}>
         <Link component="button" type="button" variant="body2" onClick={handleReset}>
-          Forgot password?
+          {t('auth.forgotPassword')}
         </Link>
       </Box>
       <Button
@@ -95,12 +97,12 @@ const LoginForm: React.FC = () => {
         disabled={loading}
         startIcon={loading ? <CircularProgress size={18} color="inherit" /> : null}
       >
-        Sign In
+        {t('auth.signIn')}
       </Button>
 
       <Divider>
         <Typography variant="caption" color="text.secondary">
-          OR
+          {t('common.or')}
         </Typography>
       </Divider>
 

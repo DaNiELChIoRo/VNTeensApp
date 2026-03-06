@@ -12,6 +12,7 @@ import {
 import MailIcon from '@mui/icons-material/Mail'
 import DraftsIcon from '@mui/icons-material/Drafts'
 import CampaignIcon from '@mui/icons-material/Campaign'
+import { useTranslation } from 'react-i18next'
 import { Message } from '../../types'
 import { formatRelative } from '../../utils/formatDate'
 import { useAuth } from '../../hooks/useAuth'
@@ -24,6 +25,7 @@ interface Props {
 
 const MessageList: React.FC<Props> = ({ messages, selectedId, onSelect }) => {
   const { currentUser } = useAuth()
+  const { t } = useTranslation()
 
   return (
     <List disablePadding>
@@ -56,8 +58,8 @@ const MessageList: React.FC<Props> = ({ messages, selectedId, onSelect }) => {
                       {msg.subject}
                     </Typography>
                     <Box sx={{ display: 'flex', gap: 0.5, alignItems: 'center', flexShrink: 0, ml: 0.5 }}>
-                      {isBroadcast && <Chip label="Broadcast" size="small" sx={{ fontSize: '0.6rem' }} />}
-                      {!isRead && <Chip label="New" size="small" color="primary" sx={{ fontSize: '0.6rem' }} />}
+                      {isBroadcast && <Chip label={t('messages.broadcast')} size="small" sx={{ fontSize: '0.6rem' }} />}
+                      {!isRead && <Chip label={t('messages.new')} size="small" color="primary" sx={{ fontSize: '0.6rem' }} />}
                     </Box>
                   </Box>
                 }

@@ -10,8 +10,9 @@ import {
   Autocomplete,
   Chip,
 } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 import { AppEvent, AppUser, EventType } from '../../types'
-import { EVENT_TYPE_LABELS } from '../../utils/eventColors'
+import { EVENT_TYPE_COLORS } from '../../utils/eventColors'
 import { getAllUsers } from '../../services/userService'
 
 interface Props {
@@ -32,9 +33,12 @@ export interface EventFormData {
   assignedUserIds: string[]
 }
 
+const EVENT_TYPES = Object.keys(EVENT_TYPE_COLORS) as EventType[]
+
 const toInputDate = (d: Date) => d.toISOString().slice(0, 16)
 
-const EventForm: React.FC<Props> = ({ initial, onSubmit, onCancel, submitLabel = 'Save' }) => {
+const EventForm: React.FC<Props> = ({ initial, onSubmit, onCancel, submitLabel }) => {
+  const { t } = useTranslation()
   const [title, setTitle] = useState(initial?.title ?? '')
   const [description, setDescription] = useState(initial?.description ?? '')
   const [location, setLocation] = useState(initial?.location ?? '')
@@ -49,22 +53,20 @@ const EventForm: React.FC<Props> = ({ initial, onSubmit, onCancel, submitLabel =
 
   const handleStartChange = (value: string) => {
     setStartDateTime(value)
-    // Auto-advance end date if it would be before the new start
     const newStart = new Date(value)
     const currentEnd = new Date(endDateTime)
     if (currentEnd <= newStart) {
-      // Keep the same duration (1 hour default), just shift end to start + 1 hour
       setEndDateTime(toInputDate(new Date(newStart.getTime() + 3600000)))
     }
   }
 
   const handleStartDateOnlyChange = (value: string) => {
     setStartDateTime(value)
-    // For all-day events: if end date is before new start date, set end = start
     if (endDateTime.slice(0, 10) < value) {
       setEndDateTime(value)
     }
   }
+
   const [allDay, setAllDay] = useState(initial?.allDay ?? false)
   const [eventType, setEventType] = useState<EventType>(initial?.eventType ?? 'other')
   const [assignedUserIds, setAssignedUserIds] = useState<string[]>(initial?.assignedUserIds ?? [])
@@ -87,26 +89,26 @@ const EventForm: React.FC<Props> = ({ initial, onSubmit, onCancel, submitLabel =
 
   return (
     <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2, pt: 1 }}>
-      <TextField label="Title" value={title} onChange={(e) => setTitle(e.target.value)} required fullWidth />
+      <TextField label={t('events.title')} value={title} onChange={(e) => setTitle(e.target.value)} required fullWidth />
       <TextField
-        label="Event Type"
+        label={t('events.type')}
         select
         value={eventType}
         onChange={(e) => setEventType(e.target.value as EventType)}
         fullWidth
       >
-        {(Object.keys(EVENT_TYPE_LABELS) as EventType[]).map((t) => (
-          <MenuItem key={t} value={t}>{EVENT_TYPE_LABELS[t]}</MenuItem>
+        {EVENT_TYPES.map((type) => (
+          <MenuItem key={type} value={type}>{t(`events.types.${type}`)}</MenuItem>
         ))}
       </TextField>
-      <TextField label="Description" value={description} onChange={(e) => setDescription(e.target.value)} multiline rows={2} fullWidth />
-      <TextField label="Location" value={location} onChange={(e) => setLocation(e.target.value)} fullWidth />
+      <TextField label={t('events.description')} value={description} onChange={(e) => setDescription(e.target.value)} multiline rows={2} fullWidth />
+      <TextField label={t('events.location')} value={location} onChange={(e) => setLocation(e.target.value)} fullWidth />
       <FormControlLabel
         control={<Checkbox checked={allDay} onChange={(e) => setAllDay(e.target.checked)} />}
-        label="All day"
+        label={t('events.allDay')}
       />
       <TextField
-        label="Start"
+        label={t('events.start')}
         type={allDay ? 'date' : 'datetime-local'}
         value={allDay ? startDateTime.slice(0, 10) : startDateTime}
         onChange={(e) => allDay ? handleStartDateOnlyChange(e.target.value) : handleStartChange(e.target.value)}
@@ -115,7 +117,7 @@ const EventForm: React.FC<Props> = ({ initial, onSubmit, onCancel, submitLabel =
         InputLabelProps={{ shrink: true }}
       />
       <TextField
-        label="End"
+        label={t('events.end')}
         type={allDay ? 'date' : 'datetime-local'}
         value={allDay ? endDateTime.slice(0, 10) : endDateTime}
         onChange={(e) => setEndDateTime(e.target.value)}
@@ -136,12 +138,12 @@ const EventForm: React.FC<Props> = ({ initial, onSubmit, onCancel, submitLabel =
             return <Chip key={key} label={u.displayName || u.email} size="small" {...tagProps} />
           })
         }
-        renderInput={(params) => <TextField {...params} label="Assign People" />}
+        renderInput={(params) => <TextField {...params} label={t('events.assignPeople')} />}
       />
       <Box sx={{ display: 'flex', gap: 1, justifyContent: 'flex-end' }}>
-        <Button onClick={onCancel}>Cancel</Button>
+        <Button onClick={onCancel}>{t('common.cancel')}</Button>
         <Button type="submit" variant="contained" disabled={loading} startIcon={loading ? <CircularProgress size={16} /> : null}>
-          {submitLabel}
+          {submitLabel ?? t('common.save')}
         </Button>
       </Box>
     </Box>

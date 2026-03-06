@@ -11,6 +11,7 @@ import {
   MenuItem,
 } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
+import { useTranslation } from 'react-i18next'
 import { createUserAccount } from '../../services/pushNotificationService'
 import { useToast } from '../../contexts/NotificationContext'
 
@@ -22,6 +23,7 @@ interface Props {
 
 const CreateUserDialog: React.FC<Props> = ({ open, onClose, onSuccess }) => {
   const { showToast } = useToast()
+  const { t } = useTranslation()
   const [displayName, setDisplayName] = useState('')
   const [email, setEmail] = useState('')
   const [role, setRole] = useState<'manager' | 'user'>('user')
@@ -40,11 +42,11 @@ const CreateUserDialog: React.FC<Props> = ({ open, onClose, onSuccess }) => {
     setLoading(true)
     try {
       await createUserAccount({ displayName, email, role })
-      showToast(`User created. Password setup email sent to ${email}.`, 'success')
+      showToast(t('users.userCreated', { email }), 'success')
       onSuccess()
       onClose()
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Failed to create user'
+      const message = err instanceof Error ? err.message : t('users.failedToUpdateRole')
       showToast(message, 'error')
     } finally {
       setLoading(false)
@@ -54,13 +56,13 @@ const CreateUserDialog: React.FC<Props> = ({ open, onClose, onSuccess }) => {
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        Add New User
+        {t('users.addNewUser')}
         <IconButton size="small" onClick={onClose} disabled={loading}><CloseIcon /></IconButton>
       </DialogTitle>
       <DialogContent>
         <form id="create-user-form" onSubmit={handleSubmit}>
           <TextField
-            label="Display Name"
+            label={t('users.displayName')}
             value={displayName}
             onChange={(e) => setDisplayName(e.target.value)}
             required
@@ -69,7 +71,7 @@ const CreateUserDialog: React.FC<Props> = ({ open, onClose, onSuccess }) => {
             sx={{ mt: 1, mb: 2 }}
           />
           <TextField
-            label="Email"
+            label={t('users.email')}
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -79,20 +81,20 @@ const CreateUserDialog: React.FC<Props> = ({ open, onClose, onSuccess }) => {
             sx={{ mb: 2 }}
           />
           <TextField
-            label="Role"
+            label={t('users.role')}
             value={role}
             onChange={(e) => setRole(e.target.value as 'manager' | 'user')}
             select
             fullWidth
             disabled={loading}
           >
-            <MenuItem value="user">User</MenuItem>
-            <MenuItem value="manager">Manager</MenuItem>
+            <MenuItem value="user">{t('users.user')}</MenuItem>
+            <MenuItem value="manager">{t('users.manager')}</MenuItem>
           </TextField>
         </form>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} disabled={loading}>Cancel</Button>
+        <Button onClick={onClose} disabled={loading}>{t('common.cancel')}</Button>
         <Button
           type="submit"
           form="create-user-form"
@@ -100,7 +102,7 @@ const CreateUserDialog: React.FC<Props> = ({ open, onClose, onSuccess }) => {
           disabled={loading}
           startIcon={loading ? <CircularProgress size={16} color="inherit" /> : null}
         >
-          {loading ? 'Creating…' : 'Create User'}
+          {loading ? t('users.creating') : t('users.createUser')}
         </Button>
       </DialogActions>
     </Dialog>

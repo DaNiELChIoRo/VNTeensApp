@@ -4,8 +4,10 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import listPlugin from '@fullcalendar/list'
 import interactionPlugin from '@fullcalendar/interaction'
+import esLocale from '@fullcalendar/core/locales/es'
 import { EventClickArg, DateSelectArg, EventDropArg } from '@fullcalendar/core'
 import { Box, useTheme } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 import { AppEvent } from '../../types'
 import { updateEvent } from '../../services/eventService'
 import { Timestamp } from 'firebase/firestore'
@@ -23,7 +25,8 @@ interface Props {
 
 const CalendarView: React.FC<Props> = ({ events, isManager, hideToolbar }) => {
   const theme = useTheme()
-  const { showToast } = useToast()
+  const { showToast, } = useToast()
+  const { t, i18n } = useTranslation()
 
   const [popoverAnchor, setPopoverAnchor] = useState<HTMLElement | null>(null)
   const [selectedEvent, setSelectedEvent] = useState<AppEvent | null>(null)
@@ -67,7 +70,7 @@ const CalendarView: React.FC<Props> = ({ events, isManager, hideToolbar }) => {
       })
     } catch {
       arg.revert()
-      showToast('Failed to update event', 'error')
+      showToast(t('events.failedToUpdate'), 'error')
     }
   }
 
@@ -75,14 +78,16 @@ const CalendarView: React.FC<Props> = ({ events, isManager, hideToolbar }) => {
     if (!selectedEvent) return
     try {
       await deleteEvent(selectedEvent.id)
-      showToast('Event deleted', 'success')
+      showToast(t('events.deleted'), 'success')
     } catch {
-      showToast('Failed to delete event', 'error')
+      showToast(t('events.failedToDelete'), 'error')
     } finally {
       setDeleteDialogOpen(false)
       setPopoverAnchor(null)
     }
   }
+
+  const fcLocale = i18n.language.startsWith('es') ? esLocale : undefined
 
   return (
     <Box
@@ -96,6 +101,7 @@ const CalendarView: React.FC<Props> = ({ events, isManager, hideToolbar }) => {
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin]}
         initialView="dayGridMonth"
+        locale={fcLocale}
         headerToolbar={hideToolbar ? false : {
           left: 'prev,next today',
           center: 'title',
@@ -134,9 +140,9 @@ const CalendarView: React.FC<Props> = ({ events, isManager, hideToolbar }) => {
 
       <ConfirmDialog
         open={deleteDialogOpen}
-        title="Delete Event"
-        message={`Are you sure you want to delete "${selectedEvent?.title}"?`}
-        confirmLabel="Delete"
+        title={t('events.deleteTitle')}
+        message={t('events.deleteConfirm', { title: selectedEvent?.title })}
+        confirmLabel={t('common.delete')}
         confirmColor="error"
         onConfirm={handleDelete}
         onCancel={() => setDeleteDialogOpen(false)}

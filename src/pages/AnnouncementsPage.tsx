@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Box, Typography, Button } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
+import { useTranslation } from 'react-i18next'
 import { useAnnouncements } from '../hooks/useAnnouncements'
 import AnnouncementCard from '../components/announcements/AnnouncementCard'
 import AnnouncementDialog from '../components/announcements/AnnouncementDialog'
@@ -14,6 +15,7 @@ import { useToast } from '../contexts/NotificationContext'
 const AnnouncementsPage: React.FC = () => {
   const { data: announcements } = useAnnouncements()
   const { showToast } = useToast()
+  const { t } = useTranslation()
   const [dialogOpen, setDialogOpen] = useState(false)
   const [deleteId, setDeleteId] = useState<string | null>(null)
 
@@ -21,9 +23,9 @@ const AnnouncementsPage: React.FC = () => {
     if (!deleteId) return
     try {
       await deleteAnnouncement(deleteId)
-      showToast('Announcement deleted', 'success')
+      showToast(t('announcements.deleted'), 'success')
     } catch {
-      showToast('Failed to delete', 'error')
+      showToast(t('announcements.failedToDelete'), 'error')
     } finally {
       setDeleteId(null)
     }
@@ -32,16 +34,16 @@ const AnnouncementsPage: React.FC = () => {
   return (
     <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-        <Typography variant="h5" fontWeight={700}>Announcements</Typography>
+        <Typography variant="h5" fontWeight={700}>{t('announcements.title')}</Typography>
         <RoleGuard requiredRole="manager">
           <Button variant="contained" startIcon={<AddIcon />} onClick={() => setDialogOpen(true)}>
-            Post
+            {t('announcements.post')}
           </Button>
         </RoleGuard>
       </Box>
 
       {announcements.length === 0 ? (
-        <EmptyState message="No announcements yet" icon={CampaignIcon} />
+        <EmptyState message={t('announcements.empty')} icon={CampaignIcon} />
       ) : (
         announcements.map((a) => (
           <AnnouncementCard key={a.id} announcement={a} onDelete={setDeleteId} />
@@ -52,9 +54,9 @@ const AnnouncementsPage: React.FC = () => {
 
       <ConfirmDialog
         open={Boolean(deleteId)}
-        title="Delete Announcement"
-        message="Are you sure you want to delete this announcement?"
-        confirmLabel="Delete"
+        title={t('announcements.deleteTitle')}
+        message={t('announcements.deleteConfirm')}
+        confirmLabel={t('common.delete')}
         confirmColor="error"
         onConfirm={handleDelete}
         onCancel={() => setDeleteId(null)}

@@ -3,6 +3,7 @@ import { Box, Typography, Divider, Chip, Paper, IconButton, Button } from '@mui/
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ReplyIcon from '@mui/icons-material/Reply'
 import CampaignIcon from '@mui/icons-material/Campaign'
+import { useTranslation } from 'react-i18next'
 import { Message } from '../../types'
 import { formatDateTime } from '../../utils/formatDate'
 import { markMessageRead } from '../../services/messageService'
@@ -16,6 +17,7 @@ interface Props {
 
 const MessageDetail: React.FC<Props> = ({ message, onBack, onReply }) => {
   const { currentUser } = useAuth()
+  const { t } = useTranslation()
   const canReply = onReply && currentUser && message.senderId !== currentUser.uid
 
   useEffect(() => {
@@ -37,17 +39,17 @@ const MessageDetail: React.FC<Props> = ({ message, onBack, onReply }) => {
         </Typography>
         <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', flexShrink: 0 }}>
           {message.recipientId === 'broadcast' && (
-            <Chip icon={<CampaignIcon />} label="Broadcast" size="small" color="secondary" />
+            <Chip icon={<CampaignIcon />} label={t('messages.broadcast')} size="small" color="secondary" />
           )}
           {canReply && (
             <Button size="small" variant="outlined" startIcon={<ReplyIcon />} onClick={() => onReply!(message)}>
-              Reply
+              {t('messages.reply')}
             </Button>
           )}
         </Box>
       </Box>
       <Typography variant="body2" color="text.secondary">
-        From: <strong>{message.senderName}</strong>
+        {t('messages.from')} <strong>{message.senderName}</strong>
       </Typography>
       <Typography variant="caption" color="text.secondary">
         {formatDateTime(message.sentAt)}

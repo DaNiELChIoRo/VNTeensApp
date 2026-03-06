@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(source ~/.nvm/nvm.sh && nvm use v18.20.8 && npm install 2>&1)",
+      "Bash(source ~/.nvm/nvm.sh && nvm use v18.20.8 && npm install firebase @mui/material @mui/icons-material @emotion/react @emotion/styled react-router-dom @tanstack/react-query @tanstack/react-query-devtools @fullcalendar/react @fullcalendar/core @fullcalendar/daygrid @fullcalendar/timegrid @fullcalendar/list @fullcalendar/interaction date-fns uuid 2>&1)",
+      "Bash(source ~/.nvm/nvm.sh && nvm use v18.20.8 && npm install -D vite-plugin-pwa workbox-window @types/uuid 2>&1)",
+      "Bash(head:*)",
+      "Bash(source:*)",
+      "Bash(tail:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git remote:*)",
+      "Bash(gh run:*)",
+      "Bash(gh auth:*)",
+      "Bash(grep:*)",
+      "Bash(git push:*)",
+      "Bash(curl:*)",
+      "Bash(python3:*)",
+      "Bash(git:*)"
+    ]
+  }
+}

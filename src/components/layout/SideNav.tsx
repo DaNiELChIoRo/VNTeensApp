@@ -21,23 +21,8 @@ import PeopleIcon from '@mui/icons-material/People'
 import PersonIcon from '@mui/icons-material/Person'
 import LogoutIcon from '@mui/icons-material/Logout'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '../../hooks/useAuth'
-
-interface NavItem {
-  label: string
-  path: string
-  icon: React.ReactNode
-  managerOnly?: boolean
-}
-
-const NAV_ITEMS: NavItem[] = [
-  { label: 'Dashboard', path: '/dashboard', icon: <DashboardIcon /> },
-  { label: 'Calendar', path: '/calendar', icon: <CalendarMonthIcon /> },
-  { label: 'Announcements', path: '/announcements', icon: <CampaignIcon /> },
-  { label: 'Messages', path: '/messages', icon: <MailIcon /> },
-  { label: 'Notifications', path: '/notifications', icon: <NotificationsIcon /> },
-  { label: 'Users', path: '/users', icon: <PeopleIcon />, managerOnly: true },
-]
 
 interface Props {
   width: number
@@ -49,6 +34,16 @@ const SideNav: React.FC<Props> = ({ width, mobileOpen, onClose }) => {
   const navigate = useNavigate()
   const location = useLocation()
   const { currentUser, userRole, logout } = useAuth()
+  const { t } = useTranslation()
+
+  const NAV_ITEMS = [
+    { label: t('nav.dashboard'), path: '/dashboard', icon: <DashboardIcon /> },
+    { label: t('nav.calendar'), path: '/calendar', icon: <CalendarMonthIcon /> },
+    { label: t('nav.announcements'), path: '/announcements', icon: <CampaignIcon /> },
+    { label: t('nav.messages'), path: '/messages', icon: <MailIcon /> },
+    { label: t('nav.notifications'), path: '/notifications', icon: <NotificationsIcon /> },
+    { label: t('nav.users'), path: '/users', icon: <PeopleIcon />, managerOnly: true },
+  ]
 
   const handleNav = (path: string) => {
     navigate(path)
@@ -105,7 +100,7 @@ const SideNav: React.FC<Props> = ({ width, mobileOpen, onClose }) => {
             <ListItemIcon sx={{ minWidth: 40 }}>
               <PersonIcon />
             </ListItemIcon>
-            <ListItemText primary="Profile" />
+            <ListItemText primary={t('nav.profile')} />
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
@@ -113,7 +108,7 @@ const SideNav: React.FC<Props> = ({ width, mobileOpen, onClose }) => {
             <ListItemIcon sx={{ minWidth: 40, color: 'error.main' }}>
               <LogoutIcon />
             </ListItemIcon>
-            <ListItemText primary="Sign Out" />
+            <ListItemText primary={t('nav.signOut')} />
           </ListItemButton>
         </ListItem>
       </List>

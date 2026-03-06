@@ -12,6 +12,7 @@ import {
 import PushPinIcon from '@mui/icons-material/PushPin'
 import DeleteIcon from '@mui/icons-material/Delete'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import { useTranslation } from 'react-i18next'
 import { Announcement } from '../../types'
 import { formatRelative } from '../../utils/formatDate'
 import { markAnnouncementRead } from '../../services/announcementService'
@@ -25,6 +26,7 @@ interface Props {
 
 const AnnouncementCard: React.FC<Props> = ({ announcement, onDelete }) => {
   const { currentUser } = useAuth()
+  const { t } = useTranslation()
   const isRead = currentUser ? announcement.readBy.includes(currentUser.uid) : false
 
   const handleMarkRead = () => {
@@ -51,7 +53,7 @@ const AnnouncementCard: React.FC<Props> = ({ announcement, onDelete }) => {
             <Typography variant="h6" fontWeight={700}>
               {announcement.title}
             </Typography>
-            {!isRead && <Chip label="New" size="small" color="primary" />}
+            {!isRead && <Chip label={t('announcements.new')} size="small" color="primary" />}
           </Box>
           <Typography variant="caption" color="text.secondary">
             {formatRelative(announcement.createdAt)}
@@ -63,14 +65,14 @@ const AnnouncementCard: React.FC<Props> = ({ announcement, onDelete }) => {
       </CardContent>
       <CardActions sx={{ justifyContent: 'flex-end' }}>
         {!isRead && (
-          <Tooltip title="Mark as read">
+          <Tooltip title={t('announcements.markAsRead')}>
             <IconButton size="small" onClick={handleMarkRead}>
               <CheckCircleIcon fontSize="small" color="action" />
             </IconButton>
           </Tooltip>
         )}
         <RoleGuard requiredRole="manager">
-          <Tooltip title="Delete">
+          <Tooltip title={t('common.delete')}>
             <IconButton size="small" color="error" onClick={() => onDelete?.(announcement.id)}>
               <DeleteIcon fontSize="small" />
             </IconButton>

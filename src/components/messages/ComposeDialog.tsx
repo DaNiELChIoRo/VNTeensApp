@@ -11,6 +11,7 @@ import {
   IconButton,
 } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
+import { useTranslation } from 'react-i18next'
 import { sendMessage } from '../../services/messageService'
 import { getAllUsers } from '../../services/userService'
 import { AppUser } from '../../types'
@@ -27,6 +28,7 @@ interface Props {
 const ComposeDialog: React.FC<Props> = ({ open, onClose, defaultRecipient = 'broadcast', defaultSubject = '' }) => {
   const { currentUser } = useAuth()
   const { showToast } = useToast()
+  const { t } = useTranslation()
   const [recipient, setRecipient] = useState(defaultRecipient)
   const [subject, setSubject] = useState(defaultSubject)
   const [body, setBody] = useState('')
@@ -54,13 +56,13 @@ const ComposeDialog: React.FC<Props> = ({ open, onClose, defaultRecipient = 'bro
         subject,
         body,
       })
-      showToast('Message sent', 'success')
+      showToast(t('messages.sent'), 'success')
       setSubject('')
       setBody('')
       setRecipient(defaultRecipient)
       onClose()
     } catch {
-      showToast('Failed to send message', 'error')
+      showToast(t('messages.failedToSend'), 'error')
     } finally {
       setLoading(false)
     }
@@ -69,20 +71,20 @@ const ComposeDialog: React.FC<Props> = ({ open, onClose, defaultRecipient = 'bro
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        {defaultSubject ? 'Reply' : 'Compose Message'}
+        {defaultSubject ? t('messages.replyTitle') : t('messages.composeTitle')}
         <IconButton size="small" onClick={onClose}><CloseIcon /></IconButton>
       </DialogTitle>
       <DialogContent>
         <form id="compose-form" onSubmit={handleSubmit}>
           <TextField
-            label="To"
+            label={t('messages.to')}
             select
             value={recipient}
             onChange={(e) => setRecipient(e.target.value)}
             fullWidth
             sx={{ mt: 1, mb: 2 }}
           >
-            <MenuItem value="broadcast">Everyone (Broadcast)</MenuItem>
+            <MenuItem value="broadcast">{t('messages.everyone')}</MenuItem>
             {users
               .filter((u) => u.uid !== currentUser?.uid)
               .map((u) => (
@@ -92,7 +94,7 @@ const ComposeDialog: React.FC<Props> = ({ open, onClose, defaultRecipient = 'bro
               ))}
           </TextField>
           <TextField
-            label="Subject"
+            label={t('messages.subject')}
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
             required
@@ -100,7 +102,7 @@ const ComposeDialog: React.FC<Props> = ({ open, onClose, defaultRecipient = 'bro
             sx={{ mb: 2 }}
           />
           <TextField
-            label="Message"
+            label={t('messages.message')}
             value={body}
             onChange={(e) => setBody(e.target.value)}
             required
@@ -111,7 +113,7 @@ const ComposeDialog: React.FC<Props> = ({ open, onClose, defaultRecipient = 'bro
         </form>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
+        <Button onClick={onClose}>{t('common.cancel')}</Button>
         <Button
           type="submit"
           form="compose-form"
@@ -119,7 +121,7 @@ const ComposeDialog: React.FC<Props> = ({ open, onClose, defaultRecipient = 'bro
           disabled={loading}
           startIcon={loading ? <CircularProgress size={16} /> : null}
         >
-          Send
+          {t('messages.send')}
         </Button>
       </DialogActions>
     </Dialog>

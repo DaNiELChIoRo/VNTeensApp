@@ -12,6 +12,7 @@ import {
   Typography,
   Box,
 } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 import { AppUser, UserRole } from '../../types'
 import { updateUserRole } from '../../services/userService'
 import { useToast } from '../../contexts/NotificationContext'
@@ -24,15 +25,16 @@ interface Props {
 
 const UserTable: React.FC<Props> = ({ users }) => {
   const { showToast } = useToast()
+  const { t } = useTranslation()
   const [updating, setUpdating] = useState<string | null>(null)
 
   const handleRoleChange = async (uid: string, role: UserRole) => {
     setUpdating(uid)
     try {
       await updateUserRole(uid, role)
-      showToast('Role updated', 'success')
+      showToast(t('users.roleUpdated'), 'success')
     } catch {
-      showToast('Failed to update role', 'error')
+      showToast(t('users.failedToUpdateRole'), 'error')
     } finally {
       setUpdating(null)
     }
@@ -43,10 +45,10 @@ const UserTable: React.FC<Props> = ({ users }) => {
       <Table>
         <TableHead>
           <TableRow sx={{ bgcolor: 'background.default' }}>
-            <TableCell>User</TableCell>
-            <TableCell>Email</TableCell>
-            <TableCell>Role</TableCell>
-            <TableCell>Joined</TableCell>
+            <TableCell>{t('users.user')}</TableCell>
+            <TableCell>{t('users.email')}</TableCell>
+            <TableCell>{t('users.role')}</TableCell>
+            <TableCell>{t('users.joined')}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -73,8 +75,8 @@ const UserTable: React.FC<Props> = ({ users }) => {
                   onChange={(e) => handleRoleChange(user.uid, e.target.value as UserRole)}
                   sx={{ minWidth: 120 }}
                 >
-                  <MenuItem value="user">User</MenuItem>
-                  <MenuItem value="manager">Manager</MenuItem>
+                  <MenuItem value="user">{t('users.user')}</MenuItem>
+                  <MenuItem value="manager">{t('users.manager')}</MenuItem>
                 </Select>
               </TableCell>
               <TableCell>

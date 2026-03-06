@@ -6,12 +6,14 @@ import CampaignIcon from '@mui/icons-material/Campaign'
 import MailIcon from '@mui/icons-material/Mail'
 import NotificationsIcon from '@mui/icons-material/Notifications'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 const ROUTES = ['/dashboard', '/calendar', '/announcements', '/messages', '/notifications']
 
 const BottomNav: React.FC = () => {
   const navigate = useNavigate()
   const { pathname } = useLocation()
+  const { t } = useTranslation()
 
   const value = ROUTES.indexOf(pathname) === -1 ? 0 : ROUTES.indexOf(pathname)
 
@@ -25,11 +27,11 @@ const BottomNav: React.FC = () => {
         onChange={(_, newVal) => navigate(ROUTES[newVal])}
         showLabels
       >
-        <BottomNavigationAction label="Home" icon={<DashboardIcon />} />
-        <BottomNavigationAction label="Calendar" icon={<CalendarMonthIcon />} />
-        <BottomNavigationAction label="Posts" icon={<CampaignIcon />} />
-        <BottomNavigationAction label="Messages" icon={<MailIcon />} />
-        <BottomNavigationAction label="Alerts" icon={<NotificationsIcon />} />
+        <BottomNavigationAction label={t('nav.home')} icon={<DashboardIcon />} />
+        <BottomNavigationAction label={t('nav.calendar')} icon={<CalendarMonthIcon />} />
+        <BottomNavigationAction label={t('nav.posts')} icon={<CampaignIcon />} />
+        <BottomNavigationAction label={t('nav.messages')} icon={<MailIcon />} />
+        <BottomNavigationAction label={t('nav.alerts')} icon={<NotificationsIcon />} />
       </BottomNavigation>
     </Paper>
   )

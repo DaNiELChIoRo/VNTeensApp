@@ -11,6 +11,7 @@ import {
   Divider,
   CircularProgress,
 } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '../hooks/useAuth'
 import { updateUserProfile } from '../services/userService'
 import { updateProfile } from 'firebase/auth'
@@ -20,6 +21,7 @@ import { useToast } from '../contexts/NotificationContext'
 const ProfilePage: React.FC = () => {
   const { currentUser, userRole } = useAuth()
   const { showToast } = useToast()
+  const { t } = useTranslation()
   const [displayName, setDisplayName] = useState(currentUser?.displayName ?? '')
   const [loading, setLoading] = useState(false)
 
@@ -30,9 +32,9 @@ const ProfilePage: React.FC = () => {
     try {
       await updateProfile(auth.currentUser!, { displayName })
       await updateUserProfile(currentUser.uid, { displayName })
-      showToast('Profile updated', 'success')
+      showToast(t('profile.updated'), 'success')
     } catch {
-      showToast('Failed to update profile', 'error')
+      showToast(t('profile.failedToUpdate'), 'error')
     } finally {
       setLoading(false)
     }
@@ -41,7 +43,7 @@ const ProfilePage: React.FC = () => {
   return (
     <Box sx={{ maxWidth: 480 }}>
       <Typography variant="h5" fontWeight={700} gutterBottom>
-        Profile
+        {t('profile.title')}
       </Typography>
       <Card>
         <CardContent sx={{ p: 3 }}>
@@ -66,14 +68,14 @@ const ProfilePage: React.FC = () => {
           <Divider sx={{ mb: 3 }} />
           <Box component="form" onSubmit={handleSave} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <TextField
-              label="Display Name"
+              label={t('profile.displayName')}
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
               required
               fullWidth
             />
             <TextField
-              label="Email"
+              label={t('profile.email')}
               value={currentUser?.email ?? ''}
               disabled
               fullWidth
@@ -84,7 +86,7 @@ const ProfilePage: React.FC = () => {
               disabled={loading}
               startIcon={loading ? <CircularProgress size={16} color="inherit" /> : null}
             >
-              Save Changes
+              {t('profile.saveChanges')}
             </Button>
           </Box>
         </CardContent>

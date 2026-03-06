@@ -11,6 +11,7 @@ import {
 } from '@mui/material'
 import DoneAllIcon from '@mui/icons-material/DoneAll'
 import CircleIcon from '@mui/icons-material/Circle'
+import { useTranslation } from 'react-i18next'
 import { useNotifications } from '../../hooks/useNotifications'
 import { markNotificationRead, markAllNotificationsRead } from '../../services/notificationService'
 import { useAuth } from '../../hooks/useAuth'
@@ -21,6 +22,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications'
 const NotificationCenter: React.FC = () => {
   const { data: notifications } = useNotifications()
   const { currentUser } = useAuth()
+  const { t } = useTranslation()
 
   const handleMarkRead = (id: string) => markNotificationRead(id)
 
@@ -29,13 +31,13 @@ const NotificationCenter: React.FC = () => {
   }
 
   if (notifications.length === 0) {
-    return <EmptyState message="No notifications yet" icon={NotificationsIcon} />
+    return <EmptyState message={t('notifications.empty')} icon={NotificationsIcon} />
   }
 
   return (
     <Box>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 1 }}>
-        <Tooltip title="Mark all as read">
+        <Tooltip title={t('notifications.markAllRead')}>
           <IconButton size="small" onClick={handleMarkAll}>
             <DoneAllIcon fontSize="small" />
           </IconButton>

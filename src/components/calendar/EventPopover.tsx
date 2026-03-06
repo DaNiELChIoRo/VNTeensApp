@@ -10,6 +10,7 @@ import {
 } from '@mui/material'
 import LocationOnIcon from '@mui/icons-material/LocationOn'
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
+import { useTranslation } from 'react-i18next'
 import { AppEvent } from '../../types'
 import { formatDateTime } from '../../utils/formatDate'
 import EventTypeChip from '../events/EventTypeChip'
@@ -24,6 +25,8 @@ interface Props {
 }
 
 const EventPopover: React.FC<Props> = ({ event, anchorEl, onClose, onEdit, onDelete }) => {
+  const { t } = useTranslation()
+
   if (!event) return null
 
   return (
@@ -38,7 +41,7 @@ const EventPopover: React.FC<Props> = ({ event, anchorEl, onClose, onEdit, onDel
       <Box>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
           <EventTypeChip eventType={event.eventType} />
-          {event.allDay && <Chip label="All day" size="small" variant="outlined" />}
+          {event.allDay && <Chip label={t('events.allDay')} size="small" variant="outlined" />}
         </Box>
         <Typography variant="h6" fontWeight={700} gutterBottom>
           {event.title}
@@ -67,8 +70,8 @@ const EventPopover: React.FC<Props> = ({ event, anchorEl, onClose, onEdit, onDel
         </Stack>
         <RoleGuard requiredRole="manager">
           <Box sx={{ display: 'flex', gap: 1, mt: 2, justifyContent: 'flex-end' }}>
-            <Button size="small" onClick={() => onEdit(event)}>Edit</Button>
-            <Button size="small" color="error" onClick={() => onDelete(event)}>Delete</Button>
+            <Button size="small" onClick={() => onEdit(event)}>{t('common.edit')}</Button>
+            <Button size="small" color="error" onClick={() => onDelete(event)}>{t('common.delete')}</Button>
           </Box>
         </RoleGuard>
       </Box>

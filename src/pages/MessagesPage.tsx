@@ -9,6 +9,7 @@ import {
   useTheme,
 } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
+import { useTranslation } from 'react-i18next'
 import { useMessages } from '../hooks/useMessages'
 import MessageList from '../components/messages/MessageList'
 import MessageDetail from '../components/messages/MessageDetail'
@@ -22,6 +23,7 @@ const MessagesPage: React.FC = () => {
   const { data: messages } = useMessages()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+  const { t } = useTranslation()
   const [selected, setSelected] = useState<Message | null>(null)
   const [composeOpen, setComposeOpen] = useState(false)
   const [replyDefaults, setReplyDefaults] = useState<{ recipientId: string; subject: string } | null>(null)
@@ -42,16 +44,16 @@ const MessagesPage: React.FC = () => {
   return (
     <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-        <Typography variant="h5" fontWeight={700}>Messages</Typography>
+        <Typography variant="h5" fontWeight={700}>{t('messages.title')}</Typography>
         <RoleGuard requiredRole="manager">
           <Button variant="contained" startIcon={<AddIcon />} onClick={() => { setReplyDefaults(null); setComposeOpen(true) }}>
-            Compose
+            {t('messages.compose')}
           </Button>
         </RoleGuard>
       </Box>
 
       {messages.length === 0 ? (
-        <EmptyState message="No messages yet" icon={MailIcon} />
+        <EmptyState message={t('messages.empty')} icon={MailIcon} />
       ) : (
         <Grid container spacing={2} sx={{ height: { md: 'calc(100vh - 160px)' } }}>
           <Grid
@@ -77,7 +79,7 @@ const MessagesPage: React.FC = () => {
                 onReply={handleReply}
               />
             ) : (
-              <EmptyState message="Select a message to read" icon={MailIcon} />
+              <EmptyState message={t('messages.selectMessage')} icon={MailIcon} />
             )}
           </Grid>
         </Grid>

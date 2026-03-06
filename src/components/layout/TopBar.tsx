@@ -13,6 +13,7 @@ import {
 import MenuIcon from '@mui/icons-material/Menu'
 import DarkModeIcon from '@mui/icons-material/DarkMode'
 import LightModeIcon from '@mui/icons-material/LightMode'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '../../hooks/useAuth'
 import { useThemeMode } from '../../contexts/ThemeContext'
 import NotificationBell from '../notifications/NotificationBell'
@@ -25,6 +26,7 @@ interface Props {
 const TopBar: React.FC<Props> = ({ onMenuClick, drawerWidth }) => {
   const { currentUser } = useAuth()
   const { mode, toggleTheme } = useThemeMode()
+  const { t } = useTranslation()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
@@ -51,7 +53,7 @@ const TopBar: React.FC<Props> = ({ onMenuClick, drawerWidth }) => {
           VNTeens
         </Typography>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <Tooltip title={mode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}>
+          <Tooltip title={mode === 'dark' ? t('theme.switchToLight') : t('theme.switchToDark')}>
             <IconButton onClick={toggleTheme}>
               {mode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
             </IconButton>
@@ -59,7 +61,7 @@ const TopBar: React.FC<Props> = ({ onMenuClick, drawerWidth }) => {
           <NotificationBell />
           <Avatar
             src={currentUser?.photoURL ?? undefined}
-            alt={currentUser?.displayName ?? 'User'}
+            alt={currentUser?.displayName ?? t('users.user')}
             sx={{ width: 36, height: 36, bgcolor: 'primary.main', fontSize: 14 }}
           >
             {currentUser?.displayName?.[0]?.toUpperCase()}

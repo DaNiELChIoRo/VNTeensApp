@@ -12,6 +12,7 @@ import {
   IconButton,
 } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
+import { useTranslation } from 'react-i18next'
 import { createAnnouncement } from '../../services/announcementService'
 import { useAuth } from '../../hooks/useAuth'
 import { useToast } from '../../contexts/NotificationContext'
@@ -24,6 +25,7 @@ interface Props {
 const AnnouncementDialog: React.FC<Props> = ({ open, onClose }) => {
   const { currentUser } = useAuth()
   const { showToast } = useToast()
+  const { t } = useTranslation()
   const [title, setTitle] = useState('')
   const [body, setBody] = useState('')
   const [pinned, setPinned] = useState(false)
@@ -35,13 +37,13 @@ const AnnouncementDialog: React.FC<Props> = ({ open, onClose }) => {
     setLoading(true)
     try {
       await createAnnouncement({ title, body, authorId: currentUser.uid, pinned })
-      showToast('Announcement posted', 'success')
+      showToast(t('announcements.posted'), 'success')
       setTitle('')
       setBody('')
       setPinned(false)
       onClose()
     } catch {
-      showToast('Failed to post announcement', 'error')
+      showToast(t('announcements.failedToPost'), 'error')
     } finally {
       setLoading(false)
     }
@@ -50,13 +52,13 @@ const AnnouncementDialog: React.FC<Props> = ({ open, onClose }) => {
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        New Announcement
+        {t('announcements.newAnnouncement')}
         <IconButton size="small" onClick={onClose}><CloseIcon /></IconButton>
       </DialogTitle>
       <DialogContent>
         <form id="announcement-form" onSubmit={handleSubmit}>
           <TextField
-            label="Title"
+            label={t('announcements.announcementTitle')}
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
@@ -64,7 +66,7 @@ const AnnouncementDialog: React.FC<Props> = ({ open, onClose }) => {
             sx={{ mt: 1, mb: 2 }}
           />
           <TextField
-            label="Body"
+            label={t('announcements.body')}
             value={body}
             onChange={(e) => setBody(e.target.value)}
             required
@@ -75,12 +77,12 @@ const AnnouncementDialog: React.FC<Props> = ({ open, onClose }) => {
           />
           <FormControlLabel
             control={<Checkbox checked={pinned} onChange={(e) => setPinned(e.target.checked)} />}
-            label="Pin this announcement"
+            label={t('announcements.pin')}
           />
         </form>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
+        <Button onClick={onClose}>{t('common.cancel')}</Button>
         <Button
           type="submit"
           form="announcement-form"
@@ -88,7 +90,7 @@ const AnnouncementDialog: React.FC<Props> = ({ open, onClose }) => {
           disabled={loading}
           startIcon={loading ? <CircularProgress size={16} /> : null}
         >
-          Post
+          {t('announcements.post')}
         </Button>
       </DialogActions>
     </Dialog>

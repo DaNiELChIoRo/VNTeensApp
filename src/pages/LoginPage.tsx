@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react'
 import { Box, Card, CardContent, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import LoginForm from '../components/auth/LoginForm'
 import { useAuth } from '../hooks/useAuth'
 
 const LoginPage: React.FC = () => {
   const { currentUser } = useAuth()
   const navigate = useNavigate()
+  const { t } = useTranslation()
 
   useEffect(() => {
     if (currentUser) navigate('/dashboard', { replace: true })
@@ -30,7 +32,7 @@ const LoginPage: React.FC = () => {
               VNTeens
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-              Youth Group Management App
+              {t('auth.subtitle')}
             </Typography>
           </Box>
           <LoginForm />

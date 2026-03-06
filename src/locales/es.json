@@ -1,0 +1,163 @@
+{
+  "common": {
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "confirm": "Confirmar",
+    "edit": "Editar",
+    "save": "Guardar",
+    "or": "O",
+    "new": "Nuevo"
+  },
+  "nav": {
+    "dashboard": "Inicio",
+    "calendar": "Calendario",
+    "announcements": "Anuncios",
+    "messages": "Mensajes",
+    "notifications": "Notificaciones",
+    "users": "Usuarios",
+    "profile": "Perfil",
+    "signOut": "Cerrar sesión",
+    "home": "Inicio",
+    "posts": "Publicaciones",
+    "alerts": "Alertas"
+  },
+  "auth": {
+    "subtitle": "App de gestión de grupo juvenil",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "signIn": "Iniciar sesión",
+    "continueWithGoogle": "Continuar con Google",
+    "loginFailed": "Error al iniciar sesión",
+    "googleFailed": "Error al iniciar sesión con Google",
+    "enterEmail": "Ingresa tu correo primero",
+    "resetFailed": "No se pudo enviar el correo de recuperación",
+    "resetSent": "¡Correo de recuperación enviado!"
+  },
+  "dashboard": {
+    "welcome": "Bienvenido, {{name}} 👋",
+    "upcomingEvents": "Próximos eventos",
+    "unreadPosts": "Publicaciones sin leer",
+    "unreadMessages": "Mensajes sin leer",
+    "notifications": "Notificaciones",
+    "noUpcomingEvents": "Sin próximos eventos"
+  },
+  "calendar": {
+    "title": "Calendario",
+    "snapshot": "Captura",
+    "capturing": "Capturando…",
+    "newEvent": "Nuevo evento",
+    "eventTypes": "TIPOS DE EVENTO"
+  },
+  "events": {
+    "editEvent": "Editar evento",
+    "newEvent": "Nuevo evento",
+    "updated": "Evento actualizado",
+    "created": "Evento creado",
+    "failedToSave": "Error al guardar el evento",
+    "update": "Actualizar",
+    "create": "Crear",
+    "title": "Título",
+    "type": "Tipo de evento",
+    "description": "Descripción",
+    "location": "Lugar",
+    "allDay": "Todo el día",
+    "start": "Inicio",
+    "end": "Fin",
+    "assignPeople": "Asignar personas",
+    "deleteTitle": "Eliminar evento",
+    "deleteConfirm": "¿Estás seguro de que quieres eliminar \"{{title}}\"?",
+    "deleted": "Evento eliminado",
+    "failedToDelete": "Error al eliminar el evento",
+    "failedToUpdate": "Error al actualizar el evento",
+    "types": {
+      "worship": "Adoración",
+      "outreach": "Alcance",
+      "meeting": "Reunión",
+      "social": "Social",
+      "service": "Servicio",
+      "training": "Capacitación",
+      "other": "Otro"
+    }
+  },
+  "announcements": {
+    "title": "Anuncios",
+    "post": "Publicar",
+    "empty": "Sin anuncios todavía",
+    "deleteTitle": "Eliminar anuncio",
+    "deleteConfirm": "¿Estás seguro de que quieres eliminar este anuncio?",
+    "deleted": "Anuncio eliminado",
+    "failedToDelete": "Error al eliminar",
+    "newAnnouncement": "Nuevo anuncio",
+    "announcementTitle": "Título",
+    "body": "Contenido",
+    "pin": "Fijar este anuncio",
+    "posted": "Anuncio publicado",
+    "failedToPost": "Error al publicar el anuncio",
+    "markAsRead": "Marcar como leído",
+    "new": "Nuevo"
+  },
+  "messages": {
+    "title": "Mensajes",
+    "compose": "Redactar",
+    "empty": "Sin mensajes todavía",
+    "selectMessage": "Selecciona un mensaje para leer",
+    "broadcast": "Difusión",
+    "reply": "Responder",
+    "replyTitle": "Responder",
+    "composeTitle": "Redactar mensaje",
+    "to": "Para",
+    "everyone": "Todos (Difusión)",
+    "subject": "Asunto",
+    "message": "Mensaje",
+    "send": "Enviar",
+    "sent": "Mensaje enviado",
+    "failedToSend": "Error al enviar el mensaje",
+    "new": "Nuevo",
+    "from": "De:"
+  },
+  "notifications": {
+    "title": "Notificaciones",
+    "empty": "Sin notificaciones todavía",
+    "markAllRead": "Marcar todo como leído",
+    "new": "Nueva notificación"
+  },
+  "profile": {
+    "title": "Perfil",
+    "displayName": "Nombre para mostrar",
+    "email": "Correo electrónico",
+    "saveChanges": "Guardar cambios",
+    "updated": "Perfil actualizado",
+    "failedToUpdate": "Error al actualizar el perfil"
+  },
+  "users": {
+    "title": "Gestión de usuarios",
+    "addUser": "Agregar usuario",
+    "user": "Usuario",
+    "email": "Correo electrónico",
+    "role": "Rol",
+    "joined": "Se unió",
+    "roleUpdated": "Rol actualizado",
+    "failedToUpdateRole": "Error al actualizar el rol",
+    "addNewUser": "Agregar nuevo usuario",
+    "displayName": "Nombre para mostrar",
+    "creating": "Creando…",
+    "createUser": "Crear usuario",
+    "userCreated": "Usuario creado. Correo de configuración de contraseña enviado a {{email}}.",
+    "manager": "Administrador"
+  },
+  "pushTest": {
+    "title": "Prueba de notificación push",
+    "description": "Envía una notificación push a todos tus dispositivos registrados. Solo visible para ti.",
+    "titleField": "Título",
+    "bodyField": "Contenido",
+    "sending": "Enviando…",
+    "sendToMyDevices": "Enviar a mis dispositivos",
+    "titleBodyRequired": "El título y el contenido son obligatorios",
+    "sentToDevices": "Enviado a {{success}}/{{total}} dispositivo(s)"
+  },
+  "theme": {
+    "switchToLight": "Cambiar a modo claro",
+    "switchToDark": "Cambiar a modo oscuro"
+  }
+}

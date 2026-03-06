@@ -14,6 +14,7 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
 import CampaignIcon from '@mui/icons-material/Campaign'
 import MailIcon from '@mui/icons-material/Mail'
 import NotificationsIcon from '@mui/icons-material/Notifications'
+import { useTranslation } from 'react-i18next'
 import { useEvents } from '../hooks/useEvents'
 import { useAnnouncements } from '../hooks/useAnnouncements'
 import { useMessages } from '../hooks/useMessages'
@@ -47,6 +48,7 @@ const StatCard: React.FC<StatCardProps> = ({ icon, label, value, color }) => (
 
 const DashboardPage: React.FC = () => {
   const { currentUser } = useAuth()
+  const { t } = useTranslation()
   const { data: events } = useEvents()
   const { data: announcements } = useAnnouncements()
   const { data: messages } = useMessages()
@@ -68,31 +70,31 @@ const DashboardPage: React.FC = () => {
   return (
     <Box>
       <Typography variant="h5" fontWeight={700} gutterBottom>
-        Welcome back, {currentUser?.displayName?.split(' ')[0]} 👋
+        {t('dashboard.welcome', { name: currentUser?.displayName?.split(' ')[0] })}
       </Typography>
 
       <Grid container spacing={2} sx={{ mb: 3 }}>
         <Grid size={{ xs: 6, sm: 3 }}>
-          <StatCard icon={<CalendarTodayIcon />} label="Upcoming Events" value={upcomingEvents.length} color="#3f51b5" />
+          <StatCard icon={<CalendarTodayIcon />} label={t('dashboard.upcomingEvents')} value={upcomingEvents.length} color="#3f51b5" />
         </Grid>
         <Grid size={{ xs: 6, sm: 3 }}>
-          <StatCard icon={<CampaignIcon />} label="Unread Posts" value={unreadAnnouncements} color="#7c4dff" />
+          <StatCard icon={<CampaignIcon />} label={t('dashboard.unreadPosts')} value={unreadAnnouncements} color="#7c4dff" />
         </Grid>
         <Grid size={{ xs: 6, sm: 3 }}>
-          <StatCard icon={<MailIcon />} label="Unread Messages" value={unreadMessages} color="#00bcd4" />
+          <StatCard icon={<MailIcon />} label={t('dashboard.unreadMessages')} value={unreadMessages} color="#00bcd4" />
         </Grid>
         <Grid size={{ xs: 6, sm: 3 }}>
-          <StatCard icon={<NotificationsIcon />} label="Notifications" value={unreadCount} color="#ff9800" />
+          <StatCard icon={<NotificationsIcon />} label={t('dashboard.notifications')} value={unreadCount} color="#ff9800" />
         </Grid>
       </Grid>
 
       <Card>
         <CardContent>
           <Typography variant="h6" fontWeight={700} gutterBottom>
-            Upcoming Events
+            {t('dashboard.upcomingEvents')}
           </Typography>
           {upcomingEvents.length === 0 ? (
-            <Typography variant="body2" color="text.secondary">No upcoming events</Typography>
+            <Typography variant="body2" color="text.secondary">{t('dashboard.noUpcomingEvents')}</Typography>
           ) : (
             <List disablePadding>
               {upcomingEvents.map((event, i) => (

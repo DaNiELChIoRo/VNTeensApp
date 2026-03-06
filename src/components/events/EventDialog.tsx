@@ -2,6 +2,7 @@ import React from 'react'
 import { Dialog, DialogTitle, DialogContent, IconButton } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import { Timestamp } from 'firebase/firestore'
+import { useTranslation } from 'react-i18next'
 import EventForm, { EventFormData } from './EventForm'
 import { AppEvent } from '../../types'
 import { createEvent, updateEvent } from '../../services/eventService'
@@ -18,6 +19,7 @@ interface Props {
 const EventDialog: React.FC<Props> = ({ open, onClose, event, defaultStart }) => {
   const { currentUser } = useAuth()
   const { showToast } = useToast()
+  const { t } = useTranslation()
 
   const handleSubmit = async (data: EventFormData) => {
     const start = new Date(data.startDateTime)
@@ -34,7 +36,7 @@ const EventDialog: React.FC<Props> = ({ open, onClose, event, defaultStart }) =>
           eventType: data.eventType,
           assignedUserIds: data.assignedUserIds,
         })
-        showToast('Event updated', 'success')
+        showToast(t('events.updated'), 'success')
       } else {
         await createEvent({
           title: data.title,
@@ -47,11 +49,11 @@ const EventDialog: React.FC<Props> = ({ open, onClose, event, defaultStart }) =>
           assignedUserIds: data.assignedUserIds,
           createdBy: currentUser!.uid,
         })
-        showToast('Event created', 'success')
+        showToast(t('events.created'), 'success')
       }
       onClose()
     } catch {
-      showToast('Failed to save event', 'error')
+      showToast(t('events.failedToSave'), 'error')
     }
   }
 
@@ -66,7 +68,7 @@ const EventDialog: React.FC<Props> = ({ open, onClose, event, defaultStart }) =>
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        {event ? 'Edit Event' : 'New Event'}
+        {event ? t('events.editEvent') : t('events.newEvent')}
         <IconButton onClick={onClose} size="small"><CloseIcon /></IconButton>
       </DialogTitle>
       <DialogContent>
@@ -74,7 +76,7 @@ const EventDialog: React.FC<Props> = ({ open, onClose, event, defaultStart }) =>
           initial={event ?? getDefaultStart()}
           onSubmit={handleSubmit}
           onCancel={onClose}
-          submitLabel={event ? 'Update' : 'Create'}
+          submitLabel={event ? t('events.update') : t('events.create')}
         />
       </DialogContent>
     </Dialog>

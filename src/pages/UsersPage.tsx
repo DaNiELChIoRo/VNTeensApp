@@ -11,6 +11,7 @@ import {
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive'
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 import { getAllUsers } from '../services/userService'
 import { sendTestPushNotification } from '../services/pushNotificationService'
 import UserTable from '../components/users/UserTable'
@@ -31,6 +32,7 @@ const UsersPage: React.FC = () => {
   const queryClient = useQueryClient()
   const { currentUser } = useAuth()
   const { showToast } = useToast()
+  const { t } = useTranslation()
   const [createDialogOpen, setCreateDialogOpen] = useState(false)
   const [pushTitle, setPushTitle] = useState('')
   const [pushBody, setPushBody] = useState('')
@@ -40,14 +42,14 @@ const UsersPage: React.FC = () => {
 
   const handleSendPush = async () => {
     if (!pushTitle.trim() || !pushBody.trim()) {
-      showToast('Title and body are required', 'warning')
+      showToast(t('pushTest.titleBodyRequired'), 'warning')
       return
     }
     setIsSending(true)
     try {
       const result = await sendTestPushNotification({ title: pushTitle, body: pushBody })
       showToast(
-        `Sent to ${result.successCount}/${result.tokenCount} device(s)`,
+        t('pushTest.sentToDevices', { success: result.successCount, total: result.tokenCount }),
         result.failureCount > 0 ? 'warning' : 'success'
       )
       setPushTitle('')
@@ -64,14 +66,14 @@ const UsersPage: React.FC = () => {
     <Box>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
         <Typography variant="h5" fontWeight={700}>
-          User Management
+          {t('users.title')}
         </Typography>
         <Button
           variant="contained"
           startIcon={<PersonAddIcon />}
           onClick={() => setCreateDialogOpen(true)}
         >
-          Add User
+          {t('users.addUser')}
         </Button>
       </Box>
       {isLoading ? <LoadingSpinner /> : <UserTable users={users} />}
@@ -88,15 +90,15 @@ const UsersPage: React.FC = () => {
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
               <NotificationsActiveIcon color="primary" />
               <Typography variant="h6" fontWeight={700}>
-                Push Notification Test
+                {t('pushTest.title')}
               </Typography>
             </Box>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Sends a push notification to all your registered devices. Only visible to you.
+              {t('pushTest.description')}
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <TextField
-                label="Title"
+                label={t('pushTest.titleField')}
                 value={pushTitle}
                 onChange={(e) => setPushTitle(e.target.value)}
                 size="small"
@@ -104,7 +106,7 @@ const UsersPage: React.FC = () => {
                 fullWidth
               />
               <TextField
-                label="Body"
+                label={t('pushTest.bodyField')}
                 value={pushBody}
                 onChange={(e) => setPushBody(e.target.value)}
                 size="small"
@@ -120,7 +122,7 @@ const UsersPage: React.FC = () => {
                   disabled={isSending || !pushTitle.trim() || !pushBody.trim()}
                   startIcon={isSending ? <CircularProgress size={16} color="inherit" /> : <NotificationsActiveIcon />}
                 >
-                  {isSending ? 'Sending…' : 'Send to My Devices'}
+                  {isSending ? t('pushTest.sending') : t('pushTest.sendToMyDevices')}
                 </Button>
               </Box>
             </Box>

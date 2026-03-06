@@ -3,6 +3,7 @@ import { Box, Typography, Button, Paper, CircularProgress } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import CameraAltIcon from '@mui/icons-material/CameraAlt'
 import { format } from 'date-fns'
+import { useTranslation } from 'react-i18next'
 import CalendarView from '../components/calendar/CalendarView'
 import CalendarSnapshotHeader from '../components/calendar/CalendarSnapshotHeader'
 import EventLegend from '../components/calendar/EventLegend'
@@ -17,6 +18,7 @@ const CalendarPage: React.FC = () => {
   const { data: events } = useEvents()
   const { userRole } = useAuth()
   const { showToast } = useToast()
+  const { t } = useTranslation()
   const [createOpen, setCreateOpen] = useState(false)
   const [isCapturing, setIsCapturing] = useState(false)
   const snapshotContainerRef = useRef<HTMLDivElement>(null)
@@ -39,7 +41,7 @@ const CalendarPage: React.FC = () => {
   return (
     <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-        <Typography variant="h5" fontWeight={700}>Calendar</Typography>
+        <Typography variant="h5" fontWeight={700}>{t('calendar.title')}</Typography>
         <RoleGuard requiredRole="manager">
           <Box sx={{ display: 'flex', gap: 1 }}>
             <Button
@@ -48,10 +50,10 @@ const CalendarPage: React.FC = () => {
               onClick={handleSnapshot}
               disabled={isCapturing}
             >
-              {isCapturing ? 'Capturing…' : 'Snapshot'}
+              {isCapturing ? t('calendar.capturing') : t('calendar.snapshot')}
             </Button>
             <Button variant="contained" startIcon={<AddIcon />} onClick={() => setCreateOpen(true)}>
-              New Event
+              {t('calendar.newEvent')}
             </Button>
           </Box>
         </RoleGuard>
